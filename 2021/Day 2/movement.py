@@ -14,4 +14,24 @@ def calculate_movement(array):
             vertical -= distance
     return horizontal * vertical
 
-print(calculate_movement(movement))
+# print(calculate_movement(movement))
+# 1947824
+
+def calculate_aimed_movement(array):
+    horizontal = 0
+    vertical = 0
+    aim = 0
+    for i in array:
+        direction, distance = list(i.items())[0]
+        if direction == "down":
+            aim += distance
+        elif direction == "up":
+            aim -= distance
+        elif direction == "forward":
+            horizontal += distance
+            vertical += (aim * distance)
+    print(horizontal)
+    print(vertical)
+    return horizontal * vertical
+
+print(calculate_aimed_movement(movement))
