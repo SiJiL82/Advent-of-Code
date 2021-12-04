@@ -7,22 +7,21 @@ class board:
 
 def load_boards_from_file(filename):
     boards = []
-    values = []
+    board = []
     file = open(filename, "r")
     for line in file:
         row = list(map(int, line.split()))
         if row == []:
-            new_board = board(values)
-            boards.append(new_board)
-            values = []
+            boards.append(board)
+            board = []
         else:
-            values.append(row)
+            board.append(row)
     file.close()
     return boards
 
 def print_boards(boards):
     for board in boards:
-        print_board(board.values)
+        print_board(board)
         print("--------------")
 
 def print_board(board):
@@ -33,6 +32,7 @@ def print_board(board):
 def check_board_for_number(board, number):
     for row in range(0, len(board)):
         for value in range(0, len(board[0])):
+            current = board[row][value]
             if board[row][value] == number:
                 board[row][value] = "X"
                 break
@@ -68,23 +68,43 @@ def get_board_score(board, multiplier):
             if value != "X":
                 score += value
     return score * multiplier
-            
+
+
+
+def remove_board(boardlist, board):
+    boardlist.remove(board)
+
 
 def calc_bingo_board_winner(numbers, boards):
+    global board_count
     for number in numbers:
-        for board in boards:
-            check_board_for_number(board.values, number)
-            winner = check_board_for_win(board.values)
+        print(number)
+        i = 0
+        board_length = len(boards)
+        while i < board_length:
+            board = boards[i]
+            check_board_for_number(board, number)
+            winner = check_board_for_win(board)
             if winner:
-                return get_board_score(board.values, number)
+                if board_length > 1:
+                    remove_board(boards, board)
+                else:
+                    return get_board_score(board, number)
+                board_length = len(boards)
+            else:
+                i = i + 1
+                # return get_board_score(board.values, number)
+                
+     
+
 
 testboards = load_boards_from_file("./Day 4/testinput.txt")
 boards = load_boards_from_file("./Day 4/input.txt")
+board_count = len(boards)
 
-
-#print(calc_bingo_board_winner(test, testboards))
+# print(calc_bingo_board_winner(test, testboards))
 # 4512            
-print(calc_bingo_board_winner(challenge, boards))
-64084
-        
+# print(calc_bingo_board_winner(challenge, boards))
+# 64084
+print(calc_bingo_board_winner(challenge, boards))      
 
